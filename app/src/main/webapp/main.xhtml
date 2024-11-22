@@ -68,8 +68,8 @@
         <div>
           <h2 style="display: inline; vertical-align: middle">История</h2>
           <h:commandButton id="clear-history" styleClass="l-button sm muted m-1" value="clear"
-            action="#{historyBean.clearHistory}" onclick="return confirm('confirm');">
-            <f:ajax execute="@form" render="results-table" disabled="true" />
+            action="#{historyBean.clearHistory()}" onclick="return confirm('confirm');">
+            <f:ajax execute="@form" render="results-table" />
           </h:commandButton>
         </div>
 
