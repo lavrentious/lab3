@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>LabWork3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <h:outputStylesheet library="css" name="index.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="true" />
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+</h:head>
+
+<h:body>
+  <header class="header">
+    <span>Лаврентьев Лев Денисович</span>
+    <small>P3219</small>
+    <small style="float: right">Вариант: 19873</small>
+  </header>
+
+  <div class="container">
+    <h1>LabWork3</h1>
+    <div class="flex-container">
+      <div class="p-1 m-1 flex-child">
+        <h2>График</h2>
+        <canvas id="canvas" class="outlined" width="400" height="400"></canvas>
+
+        <!-- FORM   -->
+        <h:form id="form" itemid="form">
+          <!-- X Input -->
+          <h:outputLabel for="xInput" value="Изменение X: " styleClass="w-100" />
+          <h:selectOneRadio class="outlined" id="xInput" value="#{formBean.x}">
+            <f:selectItems value="#{formBean.getXValues()}" />
+          </h:selectOneRadio>
+          <br /><br />
+
+          <!-- Y Input -->
+          <h:outputLabel for="yInput" value="Изменение Y: " />
+          <h:inputText id="yInput" value="#{formBean.y}" styleClass="w-100">
+            <f:validateDoubleRange minimum="-3" maximum="3" />
+          </h:inputText>
+          <br /><br />
+
+          <!-- R Input -->
+          <h:outputLabel for="rInput" value="Изменение R: " />
+          <h:selectOneRadio class="outlined" id="rInput" value="#{formBean.r}">
+            <f:selectItems value="#{formBean.getRValues()}" />
+          </h:selectOneRadio>
+          <br /><br />
+
+          <!-- Submit Button -->
+          <h:commandButton id="submitButton" styleClass="l-button" value="Проверить" action="#{historyBean.addRecord}"
+            onclick="return validateForm();">
+            <f:ajax execute="@form" render="results-table" />
+          </h:commandButton>
+        </h:form>
+      </div>
+
+      <div class="p-1 m-1 flex-child">
+        <div>
+          <h2 style="display: inline; vertical-align: middle">История</h2>
+          <h:commandButton id="clear-history" styleClass="l-button sm muted m-1" value="clear"
+            action="#{historyBean.clearHistory}" onclick="return confirm('confirm');">
+            <f:ajax execute="@form" render="results-table" disabled="true" />
+          </h:commandButton>
+        </div>
+
+        <p:dataTable id="results-table" tableStyleClass="l-table" var="record" value="#{historyBean.records}"
+          emptyMessage="" sortable="true">
+
+          <p:column headerText="X">
+            <h:outputText value="#{record.x}" />
+          </p:column>
+
+          <p:column headerText="Y">
+            <h:outputText value="#{record.y}" />
+          </p:column>
+
+          <p:column headerText="R">
+            <h:outputText value="#{record.r}" />
+          </p:column>
+
+          <p:column headerText="Result">
+            <h:outputText value="#{record.hitString}" />
+          </p:column>
+
+          <p:column headerText="Time">
+            <h:outputText value="#{record.createdAt}" />
+          </p:column>
+        </p:dataTable>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- JS -->
+  <h:outputScript library="js" name="bundle.js" />
+</h:body>
+
+</html>
