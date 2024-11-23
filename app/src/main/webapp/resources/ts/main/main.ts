@@ -1,6 +1,5 @@
 import form from "./form";
 import graph from "./graph";
-import history from "./history";
 
 function onInit() {
   form.init(() => {});
@@ -11,8 +10,6 @@ function onInit() {
     graph.addPoint(x, y, r, "red");
     window.location.replace(`./controller?x=${x}&y=${y}&r=${r}`);
   });
-
-  // history.init(graph);
 }
 
 onInit();
