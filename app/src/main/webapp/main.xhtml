@@ -29,15 +29,15 @@
   <div class="container">
     <h1>LabWork3</h1>
     <div class="flex-container">
-      <div class="p-1 m-1 flex-child">
+      <div class="p-1 m-1 flex-child" style="max-width: 400px;">
         <h2>График</h2>
         <canvas id="canvas" class="outlined" width="400" height="400"></canvas>
 
         <!-- FORM   -->
         <h:form id="form" itemid="form">
           <!-- X Input -->
-          <h:outputLabel for="xInput" value="Изменение X: " styleClass="w-100" />
-          <h:selectOneRadio class="outlined" id="xInput" value="#{formBean.x}">
+          <h:outputLabel for="xInput" value="Изменение X: " />
+          <h:selectOneRadio styleClass="outlined w-100" id="xInput" value="#{formBean.x}">
             <f:selectItems value="#{formBean.getXValues()}" />
           </h:selectOneRadio>
           <br /><br />
@@ -51,15 +51,14 @@
 
           <!-- R Input -->
           <h:outputLabel for="rInput" value="Изменение R: " />
-          <h:selectOneRadio class="outlined" id="rInput" value="#{formBean.r}">
+          <h:selectOneRadio styleClass="outlined w-100" id="rInput" value="#{formBean.r}">
             <f:selectItems value="#{formBean.getRValues()}" />
           </h:selectOneRadio>
           <br /><br />
 
           <!-- Submit Button -->
-          <h:commandButton id="submitButton" styleClass="l-button" value="Проверить" action="#{historyBean.addRecord}"
-            onclick="return validateForm();">
-            <f:ajax execute="@form" render="results-table" />
+          <h:commandButton id="submitButton" styleClass="l-button" value="Проверить" action="#{formBean.submit()}">
+            <f:ajax execute="@form" render="results-table canvasPanel @form" />
           </h:commandButton>
         </h:form>
       </div>
@@ -69,12 +68,12 @@
           <h2 style="display: inline; vertical-align: middle">История</h2>
           <h:commandButton id="clear-history" styleClass="l-button sm muted m-1" value="clear"
             action="#{historyBean.clearHistory()}" onclick="return confirm('confirm');">
-            <f:ajax execute="@form" render="results-table" />
+            <f:ajax execute="@form" render="results-table canvasPanel" />
           </h:commandButton>
         </div>
 
         <p:dataTable id="results-table" tableStyleClass="l-table" var="record" value="#{historyBean.records}"
-          emptyMessage="" sortable="true">
+          emptyMessage="history is empty" sortable="true">
 
           <p:column headerText="X">
             <h:outputText value="#{record.x}" />
@@ -104,6 +103,12 @@
 
   <!-- JS -->
   <h:outputScript library="js" name="main.bundle.js" />
+
+  <h:panelGroup id="canvasPanel">
+    <h:outputScript>
+      console.log(JSON.parse('#{historyBean.getRecordsJson()}').map(e => ({...e, createdAt: new Date(e.createdAt)})));
+    </h:outputScript>
+  </h:panelGroup>
 </h:body>
 
 </html>

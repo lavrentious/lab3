@@ -103,6 +103,7 @@ class Form {
   }
 
   init(onSubmit?: () => void) {
+    this.setSubmitActive(false);
     this.xRadio.addEventListener("change", () => {
       this.validateX();
     });
