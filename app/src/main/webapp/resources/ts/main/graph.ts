@@ -23,8 +23,17 @@ class RecordCache {
   getRecords() {
     return this.records;
   }
+
+  getRecordsArray() {
+    const arr = [];
+    for (const key in this.records) {
+      arr.push(this.records[key]);
+    }
+    return arr;
+  }
+
   clear() {
-    this.records = [];
+    this.records = {};
   }
   getRecord(id: number) {
     return this.records[id];
@@ -32,14 +41,15 @@ class RecordCache {
 }
 
 export enum PointColor {
+  FIGURE_COLOR = "#80BFFF",
   HIT = "#00FF00",
   MISS = "#FF0000",
-  PREVIEW = "#FFFF00",
-  OLD_HIT = "#009900",
-  OLD_MISS = "#990000",
+  PREVIEW = "#FF66CC",
+  OLD_HIT = "#00AA00",
+  OLD_MISS = "#AA0000",
 }
 
-enum GraphStrokeLabelPosition {
+enum GraphLabelPosition {
   LEFT,
   RIGHT,
   TOP,
@@ -49,9 +59,9 @@ enum GraphStrokeLabelPosition {
   BOTTOM_LEFT,
   BOTTOM_RIGHT,
 }
-type GraphStrokeLabel = {
+type GraphLabel = {
   text: string;
-  position: GraphStrokeLabelPosition;
+  position: GraphLabelPosition;
 };
 
 class Graph {
@@ -78,7 +88,7 @@ class Graph {
 
   private drawShape() {
     const ctx = this.ctx;
-    ctx.fillStyle = "#1E90FF";
+    ctx.fillStyle = PointColor.FIGURE_COLOR;
     // 1. rect
     ctx.beginPath();
     ctx.rect(-D, 0, D, D / 2);
@@ -115,71 +125,87 @@ class Graph {
     ctx.fillStyle = "black";
     this.labeledMark(0, -D / 2, "horizontal", {
       text: "R/2",
-      position: GraphStrokeLabelPosition.TOP_LEFT,
+      position: GraphLabelPosition.TOP_LEFT,
     });
     this.labeledMark(0, D / 2, "horizontal", {
       text: "R/2",
-      position: GraphStrokeLabelPosition.BOTTOM_RIGHT,
+      position: GraphLabelPosition.BOTTOM_RIGHT,
     });
     this.labeledMark(D / 2, 0, "vertical", {
       text: "R/2",
-      position: GraphStrokeLabelPosition.TOP_RIGHT,
+      position: GraphLabelPosition.TOP_RIGHT,
     });
     this.labeledMark(-D / 2, 0, "vertical", {
       text: "R/2",
-      position: GraphStrokeLabelPosition.TOP_LEFT,
+      position: GraphLabelPosition.TOP_LEFT,
     });
 
     // R marks
     ctx.fillStyle = "black";
     this.labeledMark(0, -D, "horizontal", {
       text: "R",
-      position: GraphStrokeLabelPosition.TOP_LEFT,
+      position: GraphLabelPosition.TOP_LEFT,
     });
     this.labeledMark(0, D, "horizontal", {
       text: "R",
-      position: GraphStrokeLabelPosition.BOTTOM_RIGHT,
+      position: GraphLabelPosition.BOTTOM_RIGHT,
     });
     this.labeledMark(D, 0, "vertical", {
       text: "R",
-      position: GraphStrokeLabelPosition.TOP_RIGHT,
+      position: GraphLabelPosition.TOP_RIGHT,
     });
     this.labeledMark(-D, 0, "vertical", {
       text: "R",
-      position: GraphStrokeLabelPosition.TOP_LEFT,
+      position: GraphLabelPosition.TOP_LEFT,
     });
   }
 
-  private labelPositionToOffset(position: GraphStrokeLabelPosition): {
+  private labelPositionToOffset(position: GraphLabelPosition): {
     xOffset: number;
     yOffset: number;
   } {
     const M = 0.2;
     switch (position) {
-      case GraphStrokeLabelPosition.LEFT:
+      case GraphLabelPosition.LEFT:
         return { xOffset: -D * M, yOffset: 0 };
-      case GraphStrokeLabelPosition.RIGHT:
+      case GraphLabelPosition.RIGHT:
         return { xOffset: D * M, yOffset: 0 };
-      case GraphStrokeLabelPosition.TOP:
+      case GraphLabelPosition.TOP:
         return { xOffset: 0, yOffset: -D * M };
-      case GraphStrokeLabelPosition.BOTTOM:
+      case GraphLabelPosition.BOTTOM:
         return { xOffset: 0, yOffset: D * M };
-      case GraphStrokeLabelPosition.TOP_LEFT:
+      case GraphLabelPosition.TOP_LEFT:
         return { xOffset: -D * M, yOffset: -D * M };
-      case GraphStrokeLabelPosition.TOP_RIGHT:
+      case GraphLabelPosition.TOP_RIGHT:
         return { xOffset: D * M, yOffset: -D * M };
-      case GraphStrokeLabelPosition.BOTTOM_LEFT:
+      case GraphLabelPosition.BOTTOM_LEFT:
         return { xOffset: -D * M, yOffset: D * M };
-      case GraphStrokeLabelPosition.BOTTOM_RIGHT:
+      case GraphLabelPosition.BOTTOM_RIGHT:
         return { xOffset: D * M, yOffset: D * M };
     }
+  }
+
+  private label(label: GraphLabel, x: number, y: number, r: number) {
+    const ctx = this.ctx;
+    const { text, position } = label;
+    const { xOffset, yOffset } = this.labelPositionToOffset(position);
+    const textMetrics = ctx.measureText(text);
+    const textWidth = textMetrics.width;
+    const textHeight =
+      textMetrics.actualBoundingBoxAscent +
+      textMetrics.actualBoundingBoxDescent;
+    ctx.fillText(
+      text,
+      (x * D) / r + xOffset - textWidth / 2,
+      (-y * D) / r + yOffset + textHeight / 2,
+    );
   }
 
   private labeledMark(
     x: number,
     y: number,
     direction: "horizontal" | "vertical",
-    label?: GraphStrokeLabel,
+    label?: GraphLabel,
   ) {
     const ctx = this.ctx;
     ctx.beginPath();
@@ -193,18 +219,7 @@ class Graph {
     ctx.stroke();
 
     if (label) {
-      const { text, position } = label;
-      const { xOffset, yOffset } = this.labelPositionToOffset(position);
-      const textMetrics = ctx.measureText(text);
-      const textWidth = textMetrics.width;
-      const textHeight =
-        textMetrics.actualBoundingBoxAscent +
-        textMetrics.actualBoundingBoxDescent;
-      ctx.fillText(
-        text,
-        x + xOffset - textWidth / 2,
-        y + yOffset + textHeight / 2,
-      );
+      this.label(label, x, -y, D);
     }
   }
 
@@ -260,29 +275,75 @@ class Graph {
     return record.isHit ? PointColor.HIT : PointColor.MISS;
   }
 
-  // TODO: filter by R and rerender canvas
-
-  // TODO: remember start time and render old records in pale colors
-
   public setRecords = (records: LRecord[]) => {
-    console.log("setting records");
-    console.log(records);
-    console.log("this", this);
+    console.log("RERENDER");
 
     for (const record of records) {
       if (!this.cache.getRecord(record.id)) {
         console.log(`adding record ${record.id}`);
         this.cache.add(record);
-        this.addPoint(record.x, record.y, record.r, this.getPointColor(record));
       }
     }
+
+    this.clearVisual();
+
+    // render preview point
+    this.renderPreviewPoint(+form.getX(), +form.getY(), +form.getR());
+
+    // render for current R
+    console.log(
+      "rendering for current R",
+      this.cache.getRecordsArray(),
+      +this.getR(),
+    );
+    for (const record of this.cache
+      .getRecordsArray()
+      .filter((r) => isNaN(+this.getR()) || r.r === +this.getR())) {
+      console.log(`rendering record ${record.id}`);
+      this.addPoint(record.x, record.y, record.r, this.getPointColor(record));
+    }
   };
+
+  private convenientPosition(x: number, y: number): GraphLabelPosition {
+    if (x > 0 && y > 0) {
+      return GraphLabelPosition.TOP_RIGHT;
+    } else if (x < 0 && y > 0) {
+      return GraphLabelPosition.TOP_LEFT;
+    } else if (x > 0 && y < 0) {
+      return GraphLabelPosition.BOTTOM_RIGHT;
+    } else if (x < 0 && y < 0) {
+      return GraphLabelPosition.BOTTOM_LEFT;
+    } else if (x === 0 && y > 0) {
+      return GraphLabelPosition.TOP;
+    } else if (x === 0 && y < 0) {
+      return GraphLabelPosition.BOTTOM;
+    } else if (x > 0 && y === 0) {
+      return GraphLabelPosition.RIGHT;
+    } else if (x < 0 && y === 0) {
+      return GraphLabelPosition.LEFT;
+    }
+    return GraphLabelPosition.TOP_RIGHT;
+  }
+
+  private renderPreviewPoint(x: number, y: number, r: number) {
+    if (isNaN(x) || isNaN(y) || isNaN(r)) {
+      return;
+    }
+    console.log("rendering preview at ", x, y, r);
+    this.addPoint(x, y, r, PointColor.PREVIEW);
+    const position: GraphLabelPosition = this.convenientPosition(x, y);
+    this.label({ position, text: `preview` }, x, y, r);
+  }
+
+  public clearVisual() {
+    this.ctx.clearRect(-2 * D, -2 * D, this.canvas.width, this.canvas.height);
+    this.drawShape();
+  }
 
   public clear = () => {
     console.log("clearing graph");
     this.cache.clear();
-    this.ctx.clearRect(-2 * D, -2 * D, this.canvas.width, this.canvas.height);
-    this.drawShape();
+    this.clearVisual();
   };
 }
 

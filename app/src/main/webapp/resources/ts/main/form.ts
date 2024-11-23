@@ -78,6 +78,12 @@ class Form {
     return isValid;
   }
 
+  public validate() {
+    this.validateX();
+    this.validateY();
+    this.validateR();
+  }
+
   resetX() {
     this.xRadio.classList.remove("valid");
     this.xRadio.classList.remove("invalid");
@@ -104,15 +110,34 @@ class Form {
 
   init(onSubmit?: () => void) {
     this.setSubmitActive(false);
+
+    this.initX();
+    this.initY();
+    this.initR();
+  }
+
+  public initX() {
+    console.log("initX");
+    this.xRadio = document.getElementById(xInputId) as HTMLInputElement;
     this.xRadio.addEventListener("change", () => {
       this.validateX();
     });
+  }
+
+  public initY() {
+    console.log("initY");
+    this.yInput = document.getElementById(yInputId) as HTMLInputElement;
     this.yInput.addEventListener("focus", () => {
       this.resetY();
     });
     this.yInput.addEventListener("blur", () => {
       this.validateY();
     });
+  }
+
+  public initR() {
+    console.log("initR");
+    this.rRadio = document.getElementById(rInputId) as HTMLInputElement;
     this.rRadio.addEventListener("change", () => {
       this.validateR();
     });
@@ -153,4 +178,8 @@ class Form {
   }
 }
 
-export default new Form();
+const form = new Form();
+
+window["form"] = form;
+
+export default form;

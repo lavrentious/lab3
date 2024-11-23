@@ -45,7 +45,6 @@ public class FormBean implements Serializable {
     RecordDao.save(record);
     this.setX(null);
     this.setY(null);
-    this.setR(null);
     historyBean.updateLocal();
 
     // UIViewRoot view = FacesContext.getCurrentInstance().getViewRoot();

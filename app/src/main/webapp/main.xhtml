@@ -39,6 +39,7 @@
           <h:outputLabel for="xInput" value="Изменение X: " />
           <h:selectOneRadio styleClass="outlined w-100" id="xInput" value="#{formBean.x}">
             <f:selectItems value="#{formBean.getXValues()}" />
+            <f:ajax render="canvasPanel" />
           </h:selectOneRadio>
           <br /><br />
 
@@ -46,6 +47,7 @@
           <h:outputLabel for="yInput" value="Изменение Y: " />
           <h:inputText id="yInput" value="#{formBean.y}" styleClass="w-100">
             <f:validateDoubleRange minimum="-3" maximum="3" />
+            <f:ajax render="canvasPanel" />
           </h:inputText>
           <br /><br />
 
@@ -53,12 +55,18 @@
           <h:outputLabel for="rInput" value="Изменение R: " />
           <h:selectOneRadio styleClass="outlined w-100" id="rInput" value="#{formBean.r}">
             <f:selectItems value="#{formBean.getRValues()}" />
+            <f:ajax render="canvasPanel" />
           </h:selectOneRadio>
+          <!-- Reset R Button -->
+          <h:commandButton id="resetRButton" styleClass="l-button sm muted" value="Reset R"
+            action="#{formBean.setR(null)}">
+            <f:ajax execute="@this" render="rInput canvasPanel" onevent="(e) => {if (e.status === 'success') {window.form.initR(); window.form.validate();}}" />
+          </h:commandButton>
           <br /><br />
 
           <!-- Submit Button -->
           <h:commandButton id="submitButton" styleClass="l-button" value="Проверить" action="#{formBean.submit()}">
-            <f:ajax execute="@form" render="results-table canvasPanel @form" />
+            <f:ajax execute="@form" render="results-table canvasPanel @form" onevent="(e) => {if (e.status === 'success') window.form.init();}" />
           </h:commandButton>
         </h:form>
       </div>
