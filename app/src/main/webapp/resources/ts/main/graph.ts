@@ -3,6 +3,34 @@ import form from "./form";
 
 const D = 100;
 
+export type LRecord = {
+  id: number;
+  x: number;
+  y: number;
+  r: number;
+  createdAt: Date;
+  isHit: boolean;
+};
+
+class RecordCache {
+  private records: Record<number, LRecord>;
+  constructor() {
+    this.records = {};
+  }
+  add(record: LRecord) {
+    this.records[record.id] = record;
+  }
+  getRecords() {
+    return this.records;
+  }
+  clear() {
+    this.records = [];
+  }
+  getRecord(id: number) {
+    return this.records[id];
+  }
+}
+
 export enum PointColor {
   HIT = "#00FF00",
   MISS = "#FF0000",
@@ -29,6 +57,8 @@ type GraphStrokeLabel = {
 class Graph {
   private ctx: CanvasRenderingContext2D | null;
   private canvas: HTMLCanvasElement;
+  private cache: RecordCache;
+  private initTime: Date;
 
   constructor() {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -39,6 +69,10 @@ class Graph {
     }
     this.ctx.font = "18px monospace";
     this.ctx.translate(2 * D, 2 * D);
+
+    this.cache = new RecordCache();
+    this.initTime = new Date();
+
     this.drawShape();
   }
 
@@ -218,7 +252,52 @@ class Graph {
   private getR() {
     return form.getR();
   }
+
+  private getPointColor(record: LRecord) {
+    if (this.initTime > record.createdAt) {
+      return record.isHit ? PointColor.OLD_HIT : PointColor.OLD_MISS;
+    }
+    return record.isHit ? PointColor.HIT : PointColor.MISS;
+  }
+
+  // TODO: filter by R and rerender canvas
+
+  // TODO: remember start time and render old records in pale colors
+
+  public setRecords = (records: LRecord[]) => {
+    console.log("setting records");
+    console.log(records);
+    console.log("this", this);
+
+    for (const record of records) {
+      if (!this.cache.getRecord(record.id)) {
+        console.log(`adding record ${record.id}`);
+        this.cache.add(record);
+        this.addPoint(record.x, record.y, record.r, this.getPointColor(record));
+      }
+    }
+  };
+
+  public clear = () => {
+    console.log("clearing graph");
+    this.cache.clear();
+    this.ctx.clearRect(-2 * D, -2 * D, this.canvas.width, this.canvas.height);
+    this.drawShape();
+  };
 }
 
 const graph = new Graph();
+
+window["graph"] = graph;
+
+window["confirmClear"] = () => {
+  if (confirm("Confirm clearing history")) {
+    if (window["graph"] && typeof window["graph"].clear === "function") {
+      window["graph"].clear();
+    }
+    return true;
+  }
+  return false;
+};
+
 export default graph;

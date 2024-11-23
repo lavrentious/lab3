@@ -45,9 +45,10 @@ public class HistoryBean implements Serializable {
     return gson.toJson(records);
   }
 
-  public void clearHistory() {
+  public String clearHistory() {
     System.out.println("Clearing history");
     RecordDao.deleteAll();
     updateLocal();
+    return null;
   }
 }

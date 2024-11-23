@@ -66,10 +66,13 @@
       <div class="p-1 m-1 flex-child">
         <div>
           <h2 style="display: inline; vertical-align: middle">История</h2>
-          <h:commandButton id="clear-history" styleClass="l-button sm muted m-1" value="clear"
-            action="#{historyBean.clearHistory()}" onclick="return confirm('confirm');">
-            <f:ajax execute="@form" render="results-table canvasPanel" />
-          </h:commandButton>
+          <h:form>
+            <h:commandButton id="clear-history" styleClass="l-button sm muted m-1" value="Clear"
+              action="#{historyBean.clearHistory()}" onclick="return confirmClear()">
+              <f:ajax execute="@this" render="results-table canvasPanel" />
+            </h:commandButton>
+          </h:form>
+
         </div>
 
         <p:dataTable id="results-table" tableStyleClass="l-table" var="record" value="#{historyBean.records}"
@@ -106,7 +109,8 @@
 
   <h:panelGroup id="canvasPanel">
     <h:outputScript>
-      console.log(JSON.parse('#{historyBean.getRecordsJson()}').map(e => ({...e, createdAt: new Date(e.createdAt)})));
+      graph.setRecords(JSON.parse('#{historyBean.getRecordsJson()}').map(e => ({...e, createdAt: new
+      Date(e.createdAt)})));
     </h:outputScript>
   </h:panelGroup>
 </h:body>
