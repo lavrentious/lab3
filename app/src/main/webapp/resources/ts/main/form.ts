@@ -1,3 +1,7 @@
+const xInputId = "form:xInput";
+const yInputId = "form:yInput";
+const rInputId = "form:rInput";
+
 class Form {
   private xRadio: HTMLInputElement;
   private yInput: HTMLInputElement;
@@ -5,9 +9,9 @@ class Form {
   private submitButton: HTMLButtonElement;
 
   constructor() {
-    this.xRadio = document.getElementById("form:xInput") as HTMLInputElement;
-    this.yInput = document.getElementById("form:yInput") as HTMLInputElement;
-    this.rRadio = document.getElementById("form:rInput") as HTMLInputElement;
+    this.xRadio = document.getElementById(xInputId) as HTMLInputElement;
+    this.yInput = document.getElementById(yInputId) as HTMLInputElement;
+    this.rRadio = document.getElementById(rInputId) as HTMLInputElement;
     this.submitButton = document.getElementById(
       "form:submitButton",
     ) as HTMLButtonElement;
@@ -142,7 +146,7 @@ class Form {
   getR() {
     return (
       document.querySelector(
-        'input[name="form:rInput"]:checked',
+        `input[name="${rInputId}"]:checked`,
       ) as HTMLInputElement
     )?.value;
   }
