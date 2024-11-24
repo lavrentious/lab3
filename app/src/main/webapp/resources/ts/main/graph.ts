@@ -239,8 +239,8 @@ class Graph {
   }
 
   public init(submitFn: (x: number, y: number, r: number) => void) {
-    const rect = this.canvas.getBoundingClientRect();
     this.canvas.addEventListener("click", (event) => {
+      const rect = this.canvas.getBoundingClientRect();
       const x = event.clientX - rect.left - 2 * D;
       const y = -(event.clientY - rect.top - 2 * D);
       const r = +this.getR();
@@ -265,6 +265,50 @@ class Graph {
       const scaledY = (y / D) * r;
 
       submitFn(scaledX, scaledY, r);
+    });
+
+    // drag preview point
+    let previewX: number | null = null;
+    let previewY: number | null = null;
+    let isDown = false;
+    let interval: number | null = null;
+    this.canvas.addEventListener("mousedown", (event) => {
+      const r = this.getR();
+      if (r == null || r == undefined) return;
+      isDown = true;
+      const rect = this.canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left - 2 * D;
+      const y = -(event.clientY - rect.top - 2 * D);
+      previewX = x;
+      previewY = y;
+      interval = setInterval(() => {
+        if (previewX != null && previewY != null) {
+          this.drawShape();
+          this.setRecords(this.cache.getRecordsArray());
+          const r = +this.getR();
+          if (r == null || r == undefined || isNaN(r)) {
+            return;
+          }
+          const scaledX = (previewX / D) * r;
+          const scaledY = (previewY / D) * r;
+          this.renderPreviewPoint(scaledX, scaledY, r);
+        }
+      }, 50);
+    });
+    this.canvas.addEventListener("mousemove", (event) => {
+      if (isDown) {
+        const rect = this.canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left - 2 * D;
+        const y = -(event.clientY - rect.top - 2 * D);
+        previewX = x;
+        previewY = y;
+      }
+    });
+    this.canvas.addEventListener("mouseup", () => {
+      isDown = false;
+      previewX = null;
+      previewY = null;
+      if (interval != null) clearInterval(interval);
     });
   }
 
