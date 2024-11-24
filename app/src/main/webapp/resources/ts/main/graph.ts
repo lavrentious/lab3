@@ -124,39 +124,44 @@ class Graph {
 
     // R/2 marks
     ctx.fillStyle = "black";
+    const r = +this.getR();
+    const rHalfString = isNaN(r)
+      ? "R/2"
+      : parseFloat((r / 2).toFixed(2)).toString();
     this.labeledMark(0, -D / 2, "horizontal", {
-      text: "R/2",
+      text: rHalfString,
       position: GraphLabelPosition.TOP_LEFT,
     });
     this.labeledMark(0, D / 2, "horizontal", {
-      text: "R/2",
+      text: rHalfString,
       position: GraphLabelPosition.BOTTOM_RIGHT,
     });
     this.labeledMark(D / 2, 0, "vertical", {
-      text: "R/2",
+      text: rHalfString,
       position: GraphLabelPosition.TOP_RIGHT,
     });
     this.labeledMark(-D / 2, 0, "vertical", {
-      text: "R/2",
+      text: rHalfString,
       position: GraphLabelPosition.TOP_LEFT,
     });
 
     // R marks
+    const rString = isNaN(r) ? "R" : parseFloat(r.toFixed(2)).toString();
     ctx.fillStyle = "black";
     this.labeledMark(0, -D, "horizontal", {
-      text: "R",
+      text: rString,
       position: GraphLabelPosition.TOP_LEFT,
     });
     this.labeledMark(0, D, "horizontal", {
-      text: "R",
+      text: rString,
       position: GraphLabelPosition.BOTTOM_RIGHT,
     });
     this.labeledMark(D, 0, "vertical", {
-      text: "R",
+      text: rString,
       position: GraphLabelPosition.TOP_RIGHT,
     });
     this.labeledMark(-D, 0, "vertical", {
-      text: "R",
+      text: rString,
       position: GraphLabelPosition.TOP_LEFT,
     });
   }
