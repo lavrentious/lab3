@@ -292,7 +292,11 @@ class Graph {
     this.clearVisual();
 
     // render preview point
-    this.renderPreviewPoint(+form.getX(), +form.getY(), +form.getR());
+    this.renderPreviewPoint(
+      +form.getX(),
+      form.getY() === "" ? NaN : +form.getY(),
+      +form.getR(),
+    );
 
     // render for current R
     console.log(

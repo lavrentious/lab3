@@ -3,6 +3,7 @@ import { roundToClosest } from "./utils";
 const xInputId = "form:xInput";
 const yInputId = "form:yInput";
 const rInputId = "form:rInput";
+const submitButtonId = "form:submitButton";
 
 class Form {
   private xRadio: HTMLInputElement;
@@ -17,7 +18,7 @@ class Form {
     this.yInput = document.getElementById(yInputId) as HTMLInputElement;
     this.rRadio = document.getElementById(rInputId) as HTMLInputElement;
     this.submitButton = document.getElementById(
-      "form:submitButton",
+      submitButtonId,
     ) as HTMLButtonElement;
 
     this.xValues = this.radioValuesToArray(xInputId);
@@ -121,7 +122,7 @@ class Form {
       };
   }
 
-  init(onSubmit?: () => void) {
+  init() {
     this.setSubmitActive(false);
 
     this.initX();
@@ -163,6 +164,9 @@ class Form {
   }
 
   setSubmitActive(isActive: boolean) {
+    this.submitButton = document.getElementById(
+      submitButtonId,
+    ) as HTMLButtonElement;
     if (isActive) this.submitButton.removeAttribute("disabled");
     else this.submitButton.setAttribute("disabled", "");
   }
