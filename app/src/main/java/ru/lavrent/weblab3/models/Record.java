@@ -2,6 +2,7 @@ package ru.lavrent.weblab3.models;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -70,6 +71,10 @@ public class Record implements Serializable {
 
   public LocalDateTime getCreatedAt() {
     return createdAt;
+  }
+
+  public Date getCreatedAtAsDate() {
+    return Date.from(createdAt.atZone(java.time.ZoneId.systemDefault()).toInstant());
   }
 
   public void setCreatedAt(LocalDateTime createdAt) {

@@ -101,25 +101,33 @@
 
         <p:dataTable id="results-table" tableStyleClass="l-table" var="record" value="#{historyBean.records}"
           emptyMessage="history is empty" sortable="true">
-
           <p:column headerText="X">
-            <h:outputText value="#{record.x}" />
+            <h:outputText value="#{record.x}">
+              <f:convertNumber type="number" maxFractionDigits="3" groupingUsed="false" />
+            </h:outputText>
           </p:column>
 
           <p:column headerText="Y">
-            <h:outputText value="#{record.y}" />
+            <h:outputText value="#{record.y}">
+              <f:convertNumber type="number" maxFractionDigits="3" groupingUsed="false" />
+            </h:outputText>
           </p:column>
 
           <p:column headerText="R">
-            <h:outputText value="#{record.r}" />
+            <h:outputText value="#{record.r}">
+              <f:convertNumber type="number" maxFractionDigits="3" groupingUsed="false" />
+            </h:outputText>
           </p:column>
 
           <p:column headerText="Result">
-            <h:outputText value="#{record.hitString}" />
+            <h:outputText value="#{record.hitString}">
+            </h:outputText>
           </p:column>
 
           <p:column headerText="Time">
-            <h:outputText value="#{record.createdAt}" />
+            <h:outputText value="#{record.getCreatedAtAsDate()}">
+              <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" />
+            </h:outputText>
           </p:column>
         </p:dataTable>
       </div>
