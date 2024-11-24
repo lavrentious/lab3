@@ -21,7 +21,7 @@ public class Record implements Serializable {
   private LocalDateTime createdAt;
 
   @Column(name = "x", nullable = false)
-  private int x;
+  private float x;
 
   @Column(name = "y", nullable = false)
   private float y;
@@ -35,7 +35,7 @@ public class Record implements Serializable {
   public Record() {
   }
 
-  public Record(int x, float y, float r, LocalDateTime createdAt) {
+  public Record(float x, float y, float r, LocalDateTime createdAt) {
     this.x = x;
     this.y = y;
     this.r = r;
@@ -47,7 +47,7 @@ public class Record implements Serializable {
     return isHit ? "✅" : "❌";
   }
 
-  public static boolean checkHit(int x, float y, float r) {
+  public static boolean checkHit(float x, float y, float r) {
     if (x >= 0 && y <= 0) {
       return Math.pow(x, 2) + Math.pow(y, 2) <= Math.pow(r / 2, 2);
     }

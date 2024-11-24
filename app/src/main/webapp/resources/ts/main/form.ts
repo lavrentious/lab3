@@ -1,3 +1,5 @@
+import { roundToClosest } from "./utils";
+
 const xInputId = "form:xInput";
 const yInputId = "form:yInput";
 const rInputId = "form:rInput";
@@ -7,6 +9,8 @@ class Form {
   private yInput: HTMLInputElement;
   private rRadio: HTMLInputElement;
   private submitButton: HTMLButtonElement;
+  private xValues: number[];
+  private rValues: number[];
 
   constructor() {
     this.xRadio = document.getElementById(xInputId) as HTMLInputElement;
@@ -15,6 +19,15 @@ class Form {
     this.submitButton = document.getElementById(
       "form:submitButton",
     ) as HTMLButtonElement;
+
+    this.xValues = this.radioValuesToArray(xInputId);
+    this.rValues = this.radioValuesToArray(rInputId);
+  }
+
+  private radioValuesToArray(id: string): number[] {
+    return Array.from(document.getElementsByName(id)).map(
+      (x) => +x.getAttribute("value") as number,
+    );
   }
 
   isInt(value: string) {
@@ -117,7 +130,6 @@ class Form {
   }
 
   public initX() {
-    console.log("initX");
     this.xRadio = document.getElementById(xInputId) as HTMLInputElement;
     this.xRadio.addEventListener("change", () => {
       this.validateX();
@@ -125,7 +137,6 @@ class Form {
   }
 
   public initY() {
-    console.log("initY");
     this.yInput = document.getElementById(yInputId) as HTMLInputElement;
     this.yInput.addEventListener("focus", () => {
       this.resetY();
@@ -136,7 +147,6 @@ class Form {
   }
 
   public initR() {
-    console.log("initR");
     this.rRadio = document.getElementById(rInputId) as HTMLInputElement;
     this.rRadio.addEventListener("change", () => {
       this.validateR();
@@ -175,6 +185,53 @@ class Form {
         `input[name="${rInputId}"]:checked`,
       ) as HTMLInputElement
     )?.value;
+  }
+
+  private checkRadio(id: string, value: string) {
+    const radios = document.getElementsByName(id);
+    radios.forEach((radio: HTMLInputElement) => {
+      if (radio.value === value) {
+        radio.checked = true;
+      }
+    });
+  }
+
+  private setX(x: number) {
+    const rounded = roundToClosest(x, this.xValues);
+    this.checkRadio(xInputId, rounded.toString());
+  }
+
+  private setY(y: number) {
+    this.yInput.value = y.toString();
+  }
+
+  private setR(r: number) {
+    const rounded = roundToClosest(r, this.rValues);
+    this.checkRadio(rInputId, rounded.toString());
+  }
+
+  submit(x: number, y: number, r: number) {
+    const xInputHidden = document.getElementById(
+      "formHidden:xInputHidden",
+    ) as HTMLInputElement;
+    const yInputHidden = document.getElementById(
+      "formHidden:yInputHidden",
+    ) as HTMLInputElement;
+
+    xInputHidden.value = x.toString();
+    yInputHidden.value = y.toString();
+
+    xInputHidden.dispatchEvent(new Event("change"));
+    yInputHidden.dispatchEvent(new Event("change"));
+
+    document.getElementById("formHidden:submitButtonHidden").click();
+    // this.validate();
+    // console.log("submitting", this.getX(), this.getY(), this.getR());
+
+    // // @ts-ignore
+    // console.log(jsf);
+    // // @ts-ignore
+    // jsf.ajax.request(this.submitButton, null, { execute: "@form" });
   }
 }
 

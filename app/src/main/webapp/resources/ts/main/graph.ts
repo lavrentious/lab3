@@ -264,8 +264,6 @@ class Graph {
       const scaledX = (x / D) * r;
       const scaledY = (y / D) * r;
 
-      console.log(`submitting coords (${scaledX}, ${scaledY})`);
-
       submitFn(scaledX, scaledY, r);
     });
   }

@@ -1,5 +1,5 @@
 import form from "./form";
-import graph, { PointColor } from "./graph";
+import graph from "./graph";
 
 function onInit() {
   form.init(() => {});
@@ -7,8 +7,7 @@ function onInit() {
   // TODO: draw old points
   graph.init((x, y, r) => {
     console.log(`received coords (${x}, ${y}) with radius ${r}`);
-    graph.addPoint(x, y, r, PointColor.MISS);
-    window.location.replace(`./controller?x=${x}&y=${y}&r=${r}`);
+    form.submit(x, y, r);
   });
 }
 

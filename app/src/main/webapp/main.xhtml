@@ -72,6 +72,19 @@
               onevent="(e) => {if (e.status === 'success') window.form.init();}" />
           </h:commandButton>
         </h:form>
+
+        <!-- Hidden form -->
+        <h:form id="formHidden" itemid="formHidden">
+          <h:inputHidden id="xInputHidden" value="#{formBean.hiddenX}">
+          </h:inputHidden>
+          <h:inputHidden id="yInputHidden" value="#{formBean.hiddenY}">
+          </h:inputHidden>
+
+          <h:commandButton id="submitButtonHidden" value="Submit" action="#{formBean.submitHidden}"
+            style="display: none;">
+            <f:ajax execute="@formHidden xInputHidden yInputHidden" render="results-table canvasPanel @formHidden" />
+          </h:commandButton>
+        </h:form>
       </div>
 
       <div class="p-1 m-1 flex-child">

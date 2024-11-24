@@ -26,12 +26,33 @@ public class FormBean implements Serializable {
     this.historyBean = historyBean;
   }
 
-  private Integer x;
+  private Float x;
   private String y;
   private Float r;
 
-  public List<Integer> getXValues() {
-    return Arrays.asList(-4, -3, -2, -1, 0, 1, 2, 3, 4);
+  private String hiddenX;
+  private String hiddenY;
+
+  public String getHiddenX() {
+    return hiddenX;
+  }
+
+  public String getHiddenY() {
+    return hiddenY;
+  }
+
+  public void setHiddenX(String hiddenX) {
+    System.out.println("HIDDEN X: " + hiddenX);
+    this.hiddenX = hiddenX;
+  }
+
+  public void setHiddenY(String hiddenY) {
+    System.out.println("HIDDEN Y: " + hiddenY);
+    this.hiddenY = hiddenY;
+  }
+
+  public List<Float> getXValues() {
+    return Arrays.asList(-4f, -3f, -2f, -1f, 0f, 1f, 2f, 3f, 4f);
   }
 
   public List<Float> getRValues() {
@@ -40,6 +61,7 @@ public class FormBean implements Serializable {
 
   public String submit() {
     System.out.println("Adding record");
+    System.out.println("x: " + this.getX() + ", y: " + this.getY() + ", r: " + this.getR());
     Validator.validate(this.getX(), this.getY(), this.getR());
     Record record = new Record(this.getX(), Float.parseFloat(this.getY()), this.getR(), LocalDateTime.now());
     RecordDao.save(record);
@@ -52,11 +74,26 @@ public class FormBean implements Serializable {
     return null;
   }
 
-  public Integer getX() {
+  public String submitHidden() {
+    System.out.println("HIDDEN Adding record");
+    System.out.println("x: " + this.getHiddenX() + ", y: " + this.getHiddenY() + ", r: " + this.getR());
+    Record record = new Record(Float.parseFloat(this.getHiddenX()), Float.parseFloat(this.getHiddenY()),
+        this.getR(), LocalDateTime.now());
+    RecordDao.save(record);
+    this.setX(null);
+    this.setY(null);
+    historyBean.updateLocal();
+
+    // UIViewRoot view = FacesContext.getCurrentInstance().getViewRoot();
+    // return view.getViewId() + "?faces-redirect=true";
+    return null;
+  }
+
+  public Float getX() {
     return x;
   }
 
-  public void setX(Integer x) {
+  public void setX(Float x) {
     this.x = x;
   }
 
