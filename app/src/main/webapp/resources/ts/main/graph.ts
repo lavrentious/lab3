@@ -83,6 +83,7 @@ class Graph {
     this.cache = new RecordCache();
     this.initTime = new Date();
 
+    this.renderLegend();
     this.drawShape();
   }
 
@@ -345,6 +346,50 @@ class Graph {
     this.cache.clear();
     this.clearVisual();
   };
+
+  public renderLegend() {
+    const legend = document.getElementById("graphLegend");
+    if (!legend) {
+      return;
+    }
+
+    legend.innerHTML = "";
+
+    const colors = [
+      ["hit", PointColor.HIT],
+      ["hit (in the past)", PointColor.OLD_HIT],
+      ["miss", PointColor.MISS],
+      ["miss (in the past)", PointColor.OLD_MISS],
+      ["preview", PointColor.PREVIEW],
+    ];
+
+    const list = document.createElement("ul");
+    list.style.listStyle = "none";
+    list.style.padding = "0";
+    list.style.margin = "0";
+
+    for (const [text, color] of colors) {
+      const listItem = document.createElement("li");
+      listItem.style.display = "flex";
+      listItem.style.alignItems = "center";
+      listItem.style.marginBottom = "0.5rem";
+
+      const colorSquare = document.createElement("div");
+      colorSquare.style.width = "1rem";
+      colorSquare.style.height = "1rem";
+      colorSquare.style.marginRight = "0.5rem";
+      colorSquare.style.backgroundColor = color;
+
+      const colorText = document.createElement("span");
+      colorText.textContent = text;
+
+      listItem.appendChild(colorSquare);
+      listItem.appendChild(colorText);
+      list.appendChild(listItem);
+    }
+
+    legend.appendChild(list);
+  }
 }
 
 const graph = new Graph();

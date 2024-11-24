@@ -32,6 +32,7 @@
       <div class="p-1 m-1 flex-child" style="max-width: 400px;">
         <h2>График</h2>
         <canvas id="canvas" class="outlined" width="400" height="400"></canvas>
+        <div id="graphLegend"></div>
 
         <!-- FORM   -->
         <h:form id="form" itemid="form">
@@ -60,13 +61,15 @@
           <!-- Reset R Button -->
           <h:commandButton id="resetRButton" styleClass="l-button sm muted" value="Reset R"
             action="#{formBean.setR(null)}">
-            <f:ajax execute="@this" render="rInput canvasPanel" onevent="(e) => {if (e.status === 'success') {window.form.initR(); window.form.validate();}}" />
+            <f:ajax execute="@this" render="rInput canvasPanel"
+              onevent="(e) => {if (e.status === 'success') {window.form.initR(); window.form.validate();}}" />
           </h:commandButton>
           <br /><br />
 
           <!-- Submit Button -->
           <h:commandButton id="submitButton" styleClass="l-button" value="Проверить" action="#{formBean.submit()}">
-            <f:ajax execute="@form" render="results-table canvasPanel @form" onevent="(e) => {if (e.status === 'success') window.form.init();}" />
+            <f:ajax execute="@form" render="results-table canvasPanel @form"
+              onevent="(e) => {if (e.status === 'success') window.form.init();}" />
           </h:commandButton>
         </h:form>
       </div>
