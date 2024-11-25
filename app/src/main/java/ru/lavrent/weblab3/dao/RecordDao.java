@@ -16,7 +16,7 @@ public abstract class RecordDao {
 
   public static List<Record> getAll() {
     EntityManager em = DBService.getInstance().getEntityManager();
-    return em.createQuery("SELECT r FROM Record r", Record.class).getResultList();
+    return em.createQuery("SELECT r FROM Record r ORDER BY r.createdAt DESC", Record.class).getResultList();
   }
 
   public static void deleteAll() {
