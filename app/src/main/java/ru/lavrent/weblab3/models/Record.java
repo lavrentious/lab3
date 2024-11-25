@@ -1,7 +1,6 @@
 package ru.lavrent.weblab3.models;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -19,7 +18,7 @@ public class Record implements Serializable {
   private Long id;
 
   @Column(name = "created_at", nullable = false)
-  private LocalDateTime createdAt;
+  private Date createdAt;
 
   @Column(name = "x", nullable = false)
   private float x;
@@ -36,7 +35,7 @@ public class Record implements Serializable {
   public Record() {
   }
 
-  public Record(float x, float y, float r, LocalDateTime createdAt) {
+  public Record(float x, float y, float r, Date createdAt) {
     this.x = x;
     this.y = y;
     this.r = r;
@@ -69,15 +68,11 @@ public class Record implements Serializable {
     this.id = id;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public Date getCreatedAt() {
     return createdAt;
   }
 
-  public Date getCreatedAtAsDate() {
-    return Date.from(createdAt.atZone(java.time.ZoneId.systemDefault()).toInstant());
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
+  public void setCreatedAt(Date createdAt) {
     this.createdAt = createdAt;
   }
 

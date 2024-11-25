@@ -125,8 +125,8 @@
           </p:column>
 
           <p:column headerText="Time">
-            <h:outputText value="#{record.getCreatedAtAsDate()}">
-              <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" />
+            <h:outputText value="#{record.createdAt}">
+              <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="GMT+3" />
             </h:outputText>
           </p:column>
         </p:dataTable>

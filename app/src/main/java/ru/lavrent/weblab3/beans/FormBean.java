@@ -1,8 +1,8 @@
 package ru.lavrent.weblab3.beans;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -63,7 +63,7 @@ public class FormBean implements Serializable {
     System.out.println("Adding record");
     System.out.println("x: " + this.getX() + ", y: " + this.getY() + ", r: " + this.getR());
     Validator.validate(this.getX(), this.getY(), this.getR());
-    Record record = new Record(this.getX(), Float.parseFloat(this.getY()), this.getR(), LocalDateTime.now());
+    Record record = new Record(this.getX(), Float.parseFloat(this.getY()), this.getR(), new Date());
     RecordDao.save(record);
     this.setX(null);
     this.setY(null);
@@ -78,7 +78,7 @@ public class FormBean implements Serializable {
     System.out.println("HIDDEN Adding record");
     System.out.println("x: " + this.getHiddenX() + ", y: " + this.getHiddenY() + ", r: " + this.getR());
     Record record = new Record(Float.parseFloat(this.getHiddenX()), Float.parseFloat(this.getHiddenY()),
-        this.getR(), LocalDateTime.now());
+        this.getR(), new Date());
     RecordDao.save(record);
     this.setX(null);
     this.setY(null);
