@@ -169,7 +169,7 @@ input[type="checkbox"] {
 
 .l-table {
   text-align: center;
-  border-collapse: separate;
+  border-collapse: separate!important; /* primefaces sucks */
   border-spacing: 0;
 }
 .l-table thead,
