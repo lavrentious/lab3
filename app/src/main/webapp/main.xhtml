@@ -126,7 +126,7 @@
 
           <p:column headerText="Time">
             <h:outputText value="#{record.createdAt}">
-              <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="GMT+3" />
+              <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss" timeZone="#{historyBean.getTimeZone()}" />
             </h:outputText>
           </p:column>
         </p:dataTable>

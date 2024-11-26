@@ -46,4 +46,8 @@ public class HistoryBean implements Serializable {
     updateLocal();
     return null;
   }
+
+  public String getTimeZone() {
+    return java.time.ZoneId.systemDefault().toString();
+  }
 }
