@@ -223,3 +223,9 @@ input[type="checkbox"] {
   letter-spacing: 1rem;
   font-weight: bold;
 }
+.clock-date {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  /* letter-spacing: 0.5rem; */
+  font-weight: bold;
+}

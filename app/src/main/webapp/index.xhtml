@@ -1,11 +1,20 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 
 <h:head>
   <meta charset="UTF-8" />
   <title>weblab3 start page</title>
 
   <h:outputStylesheet library="css" name="index.css" />
+
+  <style>
+    .ui-analog-clock {
+      width: 30%;
+      display: block;
+      margin: auto;
+    }
+  </style>
 </h:head>
 
 <h:body>
@@ -16,7 +25,10 @@
   </header>
 
   <div class="container" style="text-align: center">
-    <div class="clock m-1" id="clock"></div>
+    <p:clock displayMode="analog" />
+    <span class="clock m-1" id="clock"></span>
+    <br />
+    <span class="clock-date m-1 text-muted" id="clockDate"></span>
     <h:form>
       <h:commandButton styleClass="l-button" style="display: block; margin-left: auto; margin-right: auto"
         value="main page" action="main" />
