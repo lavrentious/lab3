@@ -26,4 +26,10 @@
         <param-value>none</param-value>
     </context-param>
 
+
+    <!-- error pages -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error-pages/404.xhtml</location>
+    </error-page>
 </web-app>
